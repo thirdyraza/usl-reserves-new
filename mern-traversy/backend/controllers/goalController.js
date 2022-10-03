@@ -9,7 +9,7 @@ const User = require('../models/user.model')
 const getGoals = asyncHandler( async (req, res) => {
     const goals = await Goal.find({ user: req.user.id })
 
-    res. status(200). json(goals)
+    res.status(200).json(goals)
 })
 
 // @desc Set goals
@@ -39,16 +39,14 @@ const updateGoal = asyncHandler( async (req, res) => {
         res.status(400)
         throw new Error('goal not found')
     }
-
-    const user = await User.findById(req.user.id)
     // check for user
-    if(!user){
+    if(!req.user){
         res.status(401)
         throw new Error('User not found')
     }
 
     // logged in user = goal owner
-    if(goal.user.toString() !== user.id){
+    if(goal.user.toString() !== req.user.id){
         res.status(401)
         throw new Error('User not authorized')
     }
@@ -67,16 +65,14 @@ const deleteGoal = asyncHandler( async (req, res) => {
         res.status(400)
         throw new Error('goal not found')
     }
-
-    const user = await User.findById(req.user.id)
     // check for user
-    if(!user){
+    if(!req.user){
         res.status(401)
         throw new Error('User not found')
     }
 
     // logged in user = goal owner
-    if(goal.user.toString() !== user.id){
+    if(goal.user.toString() !== req.user.id){
         res.status(401)
         throw new Error('User not authorized')
     }
